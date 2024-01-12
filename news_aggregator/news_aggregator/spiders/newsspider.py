@@ -21,7 +21,6 @@ class NewsspiderSpider(scrapy.Spider):
 
     def parse_article(self, response):
         article_title = response.xpath("//h1/text()").getall()
-        article_text = response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()
         article_text = ' '.join(response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()).replace("  ", " ")
         if(article_text):
             yield {

@@ -2,28 +2,28 @@ import scrapy
 import datetime
 from ..utils.shortener import Shortener
 
-class VoxspiderSpider(scrapy.Spider):
-    name = "voxspider"
-    allowed_domains = ["www.vox.com"]
-    start_urls = ["https://www.vox.com/"]
+class PcgamerspiderSpider(scrapy.Spider):
+    name = "pcgamerspider"
+    allowed_domains = ["www.pcgamer.com"]
+    start_urls = ["https://www.pcgamer.com/news/"]
     custom_settings={
             "FEEDS": {
-                f"articles/vox-{datetime.datetime.now().date()}.json": {"format": "json", 'overwrite': True},
+                f"articles/pcgamer-{datetime.datetime.now().date()}.json": {"format": "json", 'overwrite': True},
             },
         }
 
     def parse(self, response):
-        urls = response.xpath("//div[@class='c-compact-river']/div/div/div/h2/a/@href").getall()
+        urls = response.xpath("//div[contains(@class, 'listingResult small result')]/a/@href").getall()
 
         for url in urls:
             yield response.follow(url, callback=self.parse_article)
 
     def parse_article(self, response):
         article_title = response.xpath("//h1/text()").getall()
-        article_text = ' '.join(response.xpath("//div[@class='c-entry-content ']/h3/text() | //div[@class='c-entry-content ']/p/text()").getall()).replace("  ", " ")
+        article_text = ' '.join(response.xpath('//div[@id="article-body"]/p/text()').getall()).replace("  ", " ")
         if(article_text):
             yield {
-                'site': 'vox',
+                'site': 'pcgamer',
                 'url': response.url,
                 'title': article_title[0],
                 # 'text': atricle_text,

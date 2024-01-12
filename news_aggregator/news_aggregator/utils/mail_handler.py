@@ -13,6 +13,7 @@ class Mail_Handler:
         self.body = ""
         self.bbc_news = ""
         self.vox_news = ""
+        self.pcgamer_news = ""
         
     def send_email(self, mail_receiver):
 
@@ -20,6 +21,8 @@ class Mail_Handler:
             bbc = json.load(f)
         with open(f'articles/vox-{datetime.datetime.now().date()}.json') as f:
             vox = json.load(f)
+        with open(f'articles/pcgamer-{datetime.datetime.now().date()}.json') as f:
+            pcgamer = json.load(f)
 
         
 
@@ -28,6 +31,15 @@ class Mail_Handler:
             <div class="news">
                 <h3>{article['title']}</h3>
                 <h4>BBC</h4>
+                <p>{article['summary']}</p>
+                <a href="{article['url']}" class="read-more-btn">Read More</a>
+            </div>"""
+
+        for article in pcgamer:
+            self.pcgamer_news += f"""
+            <div class="news">
+                <h3>{article['title']}</h3>
+                <h4>PC GAMER</h4>
                 <p>{article['summary']}</p>
                 <a href="{article['url']}" class="read-more-btn">Read More</a>
             </div>"""
@@ -90,10 +102,10 @@ class Mail_Handler:
     </style>
   </head>
   <body>
-    <h1>DAILY NEWS</h1>
+    <h1>DAILY NEWS - """+str(datetime.datetime.now().date())+"""</h1>
     <div class="news-container">
       <div class="news-column">
-"""+self.bbc_news+"""
+"""+self.bbc_news+self.pcgamer_news+"""
       </div>
       <div class="news-column">
 """+self.vox_news+"""
@@ -108,7 +120,7 @@ class Mail_Handler:
         em = MIMEMultipart()
         em['From'] = EMAIL
         em['TO'] = mail_receiver
-        em['Subject'] = "Daily News"
+        em['Subject'] = "Daily News - " + str(datetime.datetime.now().date())
         em.attach(MIMEText(self.body, 'html'))
 
         context = ssl.create_default_context()

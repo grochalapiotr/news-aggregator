@@ -1,5 +1,4 @@
 import nltk
-import json
 import numpy as np
 from nltk.corpus import stopwords
 from nltk.cluster.util import cosine_distance
