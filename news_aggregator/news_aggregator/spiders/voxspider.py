@@ -1,5 +1,6 @@
 import scrapy
-
+import datetime
+from ..utils.shortener import Shortener
 
 class VoxspiderSpider(scrapy.Spider):
     name = "voxspider"
@@ -7,7 +8,7 @@ class VoxspiderSpider(scrapy.Spider):
     start_urls = ["https://www.vox.com/"]
     custom_settings={
             "FEEDS": {
-                f"articles/vox.json": {"format": "json"},
+                f"articles/vox-{datetime.datetime.now().date()}.json": {"format": "json"},
             },
         }
 
@@ -19,10 +20,12 @@ class VoxspiderSpider(scrapy.Spider):
 
     def parse_article(self, response):
         article_title = response.xpath("//h1/text()").getall()
-        atricle_text = response.xpath("//div[@class='c-entry-content ']/h3/text() | //div[@class='c-entry-content ']/p/text()").getall()
+        article_text = response.xpath("//div[@class='c-entry-content ']/h3/text() | //div[@class='c-entry-content ']/p/text()").getall()
+        article_text = ' '.join(article_text).replace("  ", " ")
         yield {
             'site': 'vox',
             'url': response.url,
-            'title': article_title,
-            'text': atricle_text,
+            'title': article_title[0],
+            # 'text': atricle_text,
+            'summary': Shortener().generate_summary(article_text),
         }

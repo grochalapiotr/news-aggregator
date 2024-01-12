@@ -1,5 +1,6 @@
 import scrapy
-
+import datetime
+from ..utils.shortener import Shortener
 
 class NewsspiderSpider(scrapy.Spider):
     name = "newsspider"
@@ -7,7 +8,7 @@ class NewsspiderSpider(scrapy.Spider):
     start_urls = ["https://www.bbc.com/news"]
     custom_settings={
             "FEEDS": {
-                f"articles/bbc.json": {"format": "json"},
+                f"articles/bbc-{datetime.datetime.now().date()}.json": {"format": "json"},
             },
         }
 
@@ -20,10 +21,12 @@ class NewsspiderSpider(scrapy.Spider):
 
     def parse_article(self, response):
         article_title = response.xpath("//h1/text()").getall()
-        atricle_text = response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()
+        article_text = response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()
+        article_text = ' '.join(response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()).replace("  ", " ")
         yield {
             'site': 'bbc',
             'url': response.url,
-            'title': article_title,
-            'text': atricle_text,
+            'title': article_title[0],
+            # 'text': atricle_text,
+            'summary': Shortener().generate_summary(article_text),
         }
