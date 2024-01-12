@@ -57,19 +57,6 @@ class Shortener:
 
         return " ".join(ranked_sentences)
 
-# Example usage
-
-# with open('articles/bbc.json') as f:
-#     articles = json.load(f)
-
-# for i in range(len(articles)):
-#     article_text = ' '.join(articles[i]["text"]).replace("  ", " ")
-#     summary = Shortener().generate_summary(article_text)
-#     print("Title: "+articles[i]["title"])
-#     print("Summary:")
-#     print(summary)
-#     print("-------------------")
-
 
 
 

@@ -8,7 +8,7 @@ class NewsspiderSpider(scrapy.Spider):
     start_urls = ["https://www.bbc.com/news"]
     custom_settings={
             "FEEDS": {
-                f"articles/bbc-{datetime.datetime.now().date()}.json": {"format": "json"},
+                f"articles/bbc-{datetime.datetime.now().date()}.json": {"format": "json", 'overwrite': True},
             },
         }
 
@@ -23,10 +23,11 @@ class NewsspiderSpider(scrapy.Spider):
         article_title = response.xpath("//h1/text()").getall()
         article_text = response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()
         article_text = ' '.join(response.xpath('//article//div[@data-component="text-block"]/div/p/text()').getall()).replace("  ", " ")
-        yield {
-            'site': 'bbc',
-            'url': response.url,
-            'title': article_title[0],
-            # 'text': atricle_text,
-            'summary': Shortener().generate_summary(article_text),
-        }
+        if(article_text):
+            yield {
+                'site': 'bbc',
+                'url': response.url,
+                'title': article_title[0],
+                # 'text': atricle_text,
+                'summary': Shortener().generate_summary(article_text),
+            }
