@@ -7,11 +7,11 @@ from news_aggregator.spiders.pcgamerspider import PcgamerspiderSpider
 
 def main():
     mail = ''           #receiver mail
-    process = CrawlerProcess()
-    process.crawl(NewsspiderSpider)
-    process.crawl(VoxspiderSpider)
-    process.crawl(PcgamerspiderSpider)
-    process.start()
+    # process = CrawlerProcess()
+    # process.crawl(NewsspiderSpider)
+    # process.crawl(VoxspiderSpider)
+    # process.crawl(PcgamerspiderSpider)
+    # process.start()
 
     Mail_Handler().send_email(mail)
 

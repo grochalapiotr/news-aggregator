@@ -31,6 +31,7 @@ class Mail_Handler:
             <div class="news">
                 <h3>{article['title']}</h3>
                 <h4>BBC</h4>
+                <h5>Article tone: {article['sentiment']}</h5>
                 <p>{article['summary']}</p>
                 <a href="{article['url']}" class="read-more-btn">Read More</a>
             </div>"""
@@ -40,16 +41,17 @@ class Mail_Handler:
             <div class="news">
                 <h3>{article['title']}</h3>
                 <h4>PC GAMER</h4>
+                <h5>Article tone: {article['sentiment']}</h5>
                 <p>{article['summary']}</p>
                 <a href="{article['url']}" class="read-more-btn">Read More</a>
             </div>"""
-
 
         for article in vox:
             self.vox_news += f"""
             <div class="news">
                 <h3>{article['title']}</h3>
                 <h4>VOX</h4>
+                <h5>Article tone: {article['sentiment']}</h5>
                 <p>{article['summary']}</p>
                 <a href="{article['url']}" class="read-more-btn">Read More</a>
             </div>"""
@@ -102,7 +104,7 @@ class Mail_Handler:
     </style>
   </head>
   <body>
-    <h1>DAILY NEWS - """+str(datetime.datetime.now().date())+"""</h1>
+    <h1>📰 DAILY NEWS - """+str(datetime.datetime.now().date())+""" 📰</h1>
     <div class="news-container">
       <div class="news-column">
 """+self.bbc_news+self.pcgamer_news+"""

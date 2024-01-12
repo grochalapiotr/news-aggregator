@@ -1,6 +1,7 @@
 import scrapy
 import datetime
 from ..utils.shortener import Shortener
+from ..utils.sentiment_analyzer import SentimentAnalyzer
 
 class NewsspiderSpider(scrapy.Spider):
     name = "newsspider"
@@ -26,7 +27,8 @@ class NewsspiderSpider(scrapy.Spider):
             yield {
                 'site': 'bbc',
                 'url': response.url,
+                'sentiment': SentimentAnalyzer().analyze_sentiment(article_text),
                 'title': article_title[0],
-                # 'text': atricle_text,
+                # 'text': article_text,
                 'summary': Shortener().generate_summary(article_text),
             }
